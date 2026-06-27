@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="theme-color" content="#60BB46"/>
+  <title>eBank - Digital Wallet</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="app">
+    <!--  HEADER  -->
+    <header class="header">
+      <div class="header-top">
+        <button class="icon-btn" aria-label="Menu"><i class="fas fa-bars"></i></button>
+        <div class="logo">
+          <span class="logo-icon"></span>
+          <span class="logo-text">eBank</span>
+        </div>
+        <button class="icon-btn" aria-label="Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="badge">3</span>
+        </button>
+      </div>
+      <div class="user-row">
+        <div class="avatar">DB</div>
+        <div class="user-info">
+          <p class="greeting">Good Morning 👋</p>
+          <h3 class="username">DipZ</h3>
+        </div>
+      </div>
+    </header>
+
+    <!--  MAIN SCROLLABLE AREA  -->
+    <main class="main">
+      
+      <!-- HOME VIEW -->
+      <section id="view-home" class="view active">
+        <!-- Balance Card -->
+        <div class="balance-card">
+          <div class="balance-header">
+            <span class="balance-label">Total Balance</span>
+            <button class="toggle-eye" id="toggleBalance" aria-label="Toggle balance">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="balance-amount" id="totalBalance">NPR 28,321.50</div>
+          <div class="balance-sub">Across 4 accounts</div>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="section-header">
+          <h2>Services</h2>
+        </div>
+        <div class="services-grid">
+          <button class="service-btn" data-action="transfer">
+            <div class="service-icon" style="background:#E8F5E9;color:#60BB46;">
+              <i class="fas fa-paper-plane"></i>
+            </div>
+            <span>Send Money</span>
+          </button>
+          <button class="service-btn" data-action="bank">
+            <div class="service-icon" style="background:#E3F2FD;color:#1976D2;">
+              <i class="fas fa-university"></i>
+            </div>
+            <span>Bank Transfer</span>
+          </button>
+          <button class="service-btn" data-action="load">
+            <div class="service-icon" style="background:#FFF3E0;color:#F57C00;">
+              <i class="fas fa-wallet"></i>
+            </div>
+            <span>Load Fund</span>
+          </button>
+          <button class="service-btn" data-action="mobile">
+            <div class="service-icon" style="background:#FCE4EC;color:#C2185B;">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <span>Mobile Top-up</span>
+          </button>
+          <button class="service-btn" data-action="bills">
+            <div class="service-icon" style="background:#F3E5F5;color:#7B1FA2;">
+              <i class="fas fa-file-invoice"></i>
+            </div>
+            <span>Pay Bills</span>
+          </button>
+          <button class="service-btn" data-action="qr">
+            <div class="service-icon" style="background:#E0F2F1;color:#00796B;">
+              <i class="fas fa-qrcode"></i>
+            </div>
+            <span>QR Pay</span>
+          </button>
+          <button class="service-btn" data-action="accounts">
+            <div class="service-icon" style="background:#FFF9C4;color:#F9A825;">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <span>My Accounts</span>
+          </button>
+          <button class="service-btn" data-action="history">
+            <div class="service-icon" style="background:#EFEBE9;color:#5D4037;">
+              <i class="fas fa-history"></i>
+            </div>
+            <span>History</span>
+          </button>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="section-header">
+          <h2>Recent Transactions</h2>
+          <button class="link-btn" data-action="history">See all</button>
+        </div>
+        <div class="transactions-card">
+          <div id="recentTransactions" class="transactions-list"></div>
+        </div>
+      </section>
+
+      <!-- ACCOUNTS VIEW -->
+      <section id="view-accounts" class="view">
+        <div class="view-header">
+          <button class="back-btn" data-action="home"><i class="fas fa-arrow-left"></i></button>
+          <h2>My Accounts</h2>
+        </div>
+        <div id="accountsList" class="accounts-list"></div>
+      </section>
+
+      <!-- TRANSFER VIEW -->
+      <section id="view-transfer" class="view">
+        <div class="view-header">
+          <button class="back-btn" data-action="home"><i class="fas fa-arrow-left"></i></button>
+          <h2>Send Money</h2>
+        </div>
+        <form id="transferForm" class="transfer-form" autocomplete="off">
+          <div class="form-card">
+            <label for="fromAccount">From Account</label>
+            <select id="fromAccount" class="form-input" required></select>
+          </div>
+          <div class="form-card">
+            <label for="toAccount">To Account</label>
+            <select id="toAccount" class="form-input" required></select>
+          </div>
+          <div class="form-card">
+            <label for="amount">Amount (NPR)</label>
+            <div class="amount-input-wrap">
+              <span class="currency">NPR</span>
+              <input type="number" id="amount" class="form-input amount-input" 
+                     min="1" max="100000" step="0.01" placeholder="0.00" required />
+            </div>
+            <small class="hint">Min: NPR 1 • Max: NPR 100,000 per transaction</small>
+          </div>
+          <div class="form-card">
+            <label for="remarks">Remarks (optional)</label>
+            <input type="text" id="remarks" class="form-input" maxlength="50" 
+                   placeholder="e.g. Rent payment" />
+          </div>
+          <button type="submit" class="primary-btn">
+            <i class="fas fa-lock"></i> Proceed to Confirm
+          </button>
+        </form>
+      </section>
+
+      <!-- HISTORY VIEW -->
+      <section id="view-history" class="view">
+        <div class="view-header">
+          <button class="back-btn" data-action="home"><i class="fas fa-arrow-left"></i></button>
+          <h2>Transaction History</h2>
+        </div>
+        <div class="transactions-card">
+          <div id="fullHistory" class="transactions-list"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!--  BOTTOM NAVIGATION  -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-nav="home">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" data-nav="accounts">
+        <i class="fas fa-credit-card"></i>
+        <span>Accounts</span>
+      </button>
+      <button class="nav-item qr-btn" data-nav="qr">
+        <div class="qr-circle"><i class="fas fa-qrcode"></i></div>
+      </button>
+      <button class="nav-item" data-nav="history">
+        <i class="fas fa-history"></i>
+        <span>History</span>
+      </button>
+      <button class="nav-item" data-nav="profile">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+    <!--  PIN CONFIRMATION MODAL  -->
+    <div id="pinModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Confirm Transaction</h3>
+          <button class="close-btn" id="closePinModal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="summary-card">
+            <div class="summary-row">
+              <span>From</span>
+              <strong id="sumFrom">-</strong>
+            </div>
+            <div class="summary-row">
+              <span>To</span>
+              <strong id="sumTo">-</strong>
+            </div>
+            <div class="summary-row amount-row">
+              <span>Amount</span>
+              <strong id="sumAmount">NPR 0</strong>
+            </div>
+            <div class="summary-row" id="sumRemarksRow" style="display:none;">
+              <span>Remarks</span>
+              <strong id="sumRemarks">-</strong>
+            </div>
+          </div>
+          <label class="pin-label">Enter 4-digit MPIN</label>
+          <div class="pin-inputs">
+            <input type="password" maxlength="1" class="pin-digit" data-idx="0" inputmode="numeric" />
+            <input type="password" maxlength="1" class="pin-digit" data-idx="1" inputmode="numeric" />
+            <input type="password" maxlength="1" class="pin-digit" data-idx="2" inputmode="numeric" />
+            <input type="password" maxlength="1" class="pin-digit" data-idx="3" inputmode="numeric" />
+          </div>
+          <small class="pin-hint">Demo MPIN: <strong>1234</strong></small>
+          <button id="confirmBtn" class="primary-btn" disabled>
+            <i class="fas fa-check-circle"></i> Confirm & Send
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!--  SUCCESS MODAL  -->
+    <div id="successModal" class="modal">
+      <div class="modal-content success-modal">
+        <div class="success-icon">
+          <i class="fas fa-check"></i>
+        </div>
+        <h3>Transaction Successful!</h3>
+        <p class="success-amount" id="successAmount">NPR 0</p>
+        <p class="success-sub">sent to <span id="successTo">-</span></p>
+        <p class="txn-id">TXN ID: <span id="txnId">-</span></p>
+        <button class="primary-btn" id="closeSuccess">Done</button>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
